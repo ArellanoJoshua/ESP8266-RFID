@@ -1,8 +1,9 @@
 #include <SPI.h>
 #include <MFRC522.h>
 
-#define RST_PIN         5          //  D1   = 5;
-#define SS_PIN          4         //  D2   = 4;
+#define RST_PIN         5          //  D1   = 5
+#define SS_PIN          4         //  D2   = 4
+#define BUZZER          15         //  D8 = 15
 
 MFRC522 rfid(SS_PIN, RST_PIN); // Instance of the class
 
@@ -12,6 +13,9 @@ MFRC522::MIFARE_Key key;
 byte nuidPICC[4];
 
 void setup() {
+
+  pinMode(BUZZER, OUTPUT);
+
   Serial.begin(9600);
   SPI.begin(); // Init SPI bus
   rfid.PCD_Init(); // Init MFRC522 
@@ -60,6 +64,9 @@ void loop() {
     Serial.print(F("In hex: "));
     printHex(rfid.uid.uidByte, rfid.uid.size);
     Serial.println();
+    digitalWrite(BUZZER, HIGH);
+    delay(500);
+    digitalWrite(BUZZER, LOW);
   }
   else Serial.println(F("Card read previously."));
 
